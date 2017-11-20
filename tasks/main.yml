@@ -34,6 +34,9 @@
     state: directory
     mode: 0755
 
+- name: create Prometheus group
+  group: name={{ prometheus_exporters_common_group }}  state=present
+
 - name: create Prometheus Workign user and group
   user:
     name: "{{ prometheus_exporters_common_user }}"
