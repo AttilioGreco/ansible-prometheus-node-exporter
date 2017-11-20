@@ -4,6 +4,12 @@
     path: "{{ prometheus_install_path }}"
     state: directory
     mode: 0755
+- name: create Node_expoter config dir in "/etc/sysconfig"
+  file:
+    path: /etc/sysconfig
+    state: directory
+    mode: 0755
+
 - name: create Prometheus Generic exporter tar.gz archive in "{{ generic_exporter_compressed_binary_path }}"
   file:
     path: "{{ generic_exporter_compressed_binary_path }}"
@@ -67,6 +73,19 @@
     src: "{{ node_exporter_path }}/{{ prometheus_node_exporter_release_name }}"
     path: "{{ prometheus_exporters_common_root_dir }}/node_exporter_current"
     state: link
+
+
+- name: create node_expoter sysconfig
+  template:
+    src: etc/sysconfig/node_expoter
+    dest: /etc/sysconfig/node_exporter
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_service_mgr == 'systemd'
+  notify:
+    - reenable node exporter service
+    - restart node exporter
 
 - name: create systemd service unit
   template:
