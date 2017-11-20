@@ -24,3 +24,11 @@ prometheus_node_exporter_enabled_collectors:
 prometheus_node_exporter_config_flags:
   'web.listen-address': '0.0.0.0:9100'
   'log.level': 'info'
+prometheus_install_path: "/opt/prometheus"
+generic_exporter_compressed_binary_path: "{{prometheus_install_path}}/exporter_gz"
+node_exporter_compressed_binary_path: "{{generic_exporter_compressed_binary_path}}/node_exporter"
+generic_exporter_binary_path: "{{prometheus_install_path}}/exporter"
+node_exporter_path: "{{generic_exporter_binary_path}}/node_exporter"
+prometheus_exporters_common_root_dir: "{{ prometheus_install_path }}/exporter/"
+prometheus_exporters_common_user: prometheus
+prometheus_exporters_common_group: prometheus
