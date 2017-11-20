@@ -5,6 +5,7 @@ prometheus_node_exporter_release_name: "node_exporter-{{ prometheus_node_exporte
 url: "{% if prometheus_node_exporter_version | version_compare('0.13.0', '>=') %}https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_exporter_version }}/{{ prometheus_node_exporter_release_name }}.tar.gz{% else %}https://github.com/prometheus/node_exporter/releases/download/{{ prometheus_node_exporter_version }}/{{ prometheus_node_exporter_release_name }}.tar.gz{% endif %}"
 
 # https://github.com/prometheus/node_exporter#enabled-by-default
+
 prometheus_node_exporter_enabled_collectors:
 prometheus_node_exporter_disable_collectors:
 
@@ -16,5 +17,6 @@ generic_exporter_compressed_binary_path: "{{prometheus_install_path}}/exporter_g
 node_exporter_compressed_binary_path: "{{generic_exporter_compressed_binary_path}}/node_exporter"
 generic_exporter_binary_path: "{{prometheus_install_path}}/exporter"
 node_exporter_path: "{{generic_exporter_binary_path}}/node_exporter"
+prometheus_exporters_common_root_dir: "{{ prometheus_install_path }}/exporter"
 prometheus_exporters_common_user: prometheus
 prometheus_exporters_common_group: prometheus
