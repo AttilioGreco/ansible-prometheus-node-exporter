@@ -58,6 +58,8 @@ All needed packages will be installed with this role.
 
 ## List variables
 Check on documentation what collectors are enabled by default, and what collectors are disable by default.
+
+
 | Name | Description |
 | --- | --- |
 |prometheus_node_exporter_enabled_collectors: |list collector you want enable if are disable |
