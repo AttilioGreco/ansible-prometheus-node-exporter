@@ -1,23 +1,61 @@
 ---
+- name: create Prometheus root dir in "{{ prometheus_install_path }}"
+  file:
+    path: "{{ prometheus_install_path }}"
+    state: directory
+    mode: 0755
+- name: create Prometheus Generic exporter tar.gz archive in "{{ generic_exporter_compressed_binary_path }}"
+  file:
+    path: "{{ generic_exporter_compressed_binary_path }}"
+    state: directory
+    mode: 0755
+
+- name: create Node Expoter tar.gz archive in "{{ node_exporter_compressed_binary_path }}"
+  file:
+    path: "{{ node_exporter_compressed_binary_path }}"
+    state: directory
+    mode: 0755
+
+- name: create general exporter binary file dir "{{ generic_exporter_binary_path }}"
+  file:
+    path: "{{ generic_exporter_binary_path }}"
+    state: directory
+    mode: 0755
+
+- name: create Node Expoter binary file "{{ node_exporter_path }}"
+  file:
+    path: "{{ node_exporter_path }}"
+    state: directory
+    mode: 0755
+
+- name: create Prometheus Workign user and group
+  user:
+    name: "{{ prometheus_exporters_common_user }}"
+    group: "{{ prometheus_exporters_common_group }}"
+    createhome: no
+    shell: /sbin/nologin
+    comment: "Prometheus User"
+    state: present
+
 
 - name: download prometheus node exporter binary
   get_url:
     url: "{{ url }}"
-    dest: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_node_exporter_release_name }}.tar.gz"
+    dest: "{{ node_exporter_compressed_binary_path }}/{{ prometheus_node_exporter_release_name }}.tar.gz"
 
 - name: unarchive binary tarball
   unarchive:
     copy: no
-    src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_node_exporter_release_name }}.tar.gz"
-    dest: "{{ prometheus_exporters_common_dist_dir }}"
-    creates: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_node_exporter_release_name }}/node_exporter"
+    src: "{{ node_exporter_compressed_binary_path }}/{{ prometheus_node_exporter_release_name }}.tar.gz"
+    dest: "{{ node_exporter_path }}"
+    creates: "{{ node_exporter_path }}/{{ prometheus_node_exporter_release_name }}"
   register: prometheus_node_exporter_updated
   notify:
     - restart node exporter
 
 - name: update group and owner for files
   file:
-    path: "{{ prometheus_node_exporter_release_name }}"
+    path: "{{ node_exporter_path }}"
     state: directory
     recurse: yes
     owner: "{{ prometheus_exporters_common_user}}"
@@ -26,7 +64,7 @@
 
 - name: create symlink to the current release
   file:
-    src: "{{ prometheus_exporters_common_dist_dir }}/{{ prometheus_node_exporter_release_name }}"
+    src: "{{ node_exporter_path }}/{{ prometheus_node_exporter_release_name }}"
     path: "{{ prometheus_exporters_common_root_dir }}/node_exporter_current"
     state: link
 
