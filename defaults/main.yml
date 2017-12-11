@@ -20,3 +20,4 @@ node_exporter_path: "{{generic_exporter_binary_path}}/node_exporter"
 prometheus_exporters_common_root_dir: "{{ prometheus_install_path }}/exporter"
 prometheus_exporters_common_user: prometheus
 prometheus_exporters_common_group: prometheus
+prometheus_config_path: /etc/prometheus

@@ -1,4 +1,14 @@
 ---
+- name: mkdir for general cases
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_exporters_common_user }}"
+    group: "{{ prometheus_exporters_common_group }}"
+    mode: "u=rwx,g=rx,o="
+  with_items:
+    - "{{ prometheus_config_path }}"
+
 - name: create Prometheus root dir in "{{ prometheus_install_path }}"
   file:
     path: "{{ prometheus_install_path }}"
@@ -33,6 +43,9 @@
     path: "{{ node_exporter_path }}"
     state: directory
     mode: 0755
+
+- name: create Prometheus group
+  group: name={{ prometheus_exporters_common_group }}  state=present
 
 - name: create Prometheus Workign user and group
   user:
