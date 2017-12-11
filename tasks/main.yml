@@ -1,4 +1,16 @@
 ---
+- name: create Prometheus group
+  group: name={{ prometheus_exporters_common_group }}  state=present
+
+- name: create Prometheus Workign user and group
+  user:
+    name: "{{ prometheus_exporters_common_user }}"
+    group: "{{ prometheus_exporters_common_group }}"
+    createhome: no
+    shell: /sbin/nologin
+    comment: "Prometheus User"
+    state: present
+
 - name: mkdir for general cases
   file:
     path: "{{ item }}"
@@ -43,18 +55,6 @@
     path: "{{ node_exporter_path }}"
     state: directory
     mode: 0755
-
-- name: create Prometheus group
-  group: name={{ prometheus_exporters_common_group }}  state=present
-
-- name: create Prometheus Workign user and group
-  user:
-    name: "{{ prometheus_exporters_common_user }}"
-    group: "{{ prometheus_exporters_common_group }}"
-    createhome: no
-    shell: /sbin/nologin
-    comment: "Prometheus User"
-    state: present
 
 
 - name: download prometheus node exporter binary
